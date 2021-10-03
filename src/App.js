@@ -1,10 +1,9 @@
-import { Component } from 'react';
+import React,{ Component } from 'react';
 import './App.css';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-
 
 class App extends Component {
 
@@ -14,17 +13,25 @@ class App extends Component {
       userInputArray: [],
       userInput: "",
       largestNum: "0",
-      emptyarray: []
+      validate: ""
     }
   }
 
   updatingArray = (e) => {
     e.preventDefault();
-    this.state.userInputArray.push(this.state.userInput);
-    this.setState({
-      largestNum: Math.max(...this.state.userInputArray),
-      userInput: ""
-    })
+    if(this.state.userInput === ""){
+      this.setState({
+        validate: "Please enter this feild"
+      })
+    }
+    else{
+      this.state.userInputArray.push(this.state.userInput);
+      this.setState({
+        largestNum: Math.max(...this.state.userInputArray),
+        userInput: "",
+        validate: ""
+      })
+    }
   }
 
   inputHandleChange = (e) => {
@@ -33,11 +40,12 @@ class App extends Component {
     })
   }
 
-  clearAll =() => {
+  clearAll = () => {
     this.setState({
       userInput: "",
       userInputArray: [],
-      largestNum: "0"      
+      largestNum: "0",
+      validate: ""
     })
   }
 
@@ -45,7 +53,7 @@ class App extends Component {
     return (
       <div className="App" >
         <br />
-        <h2 className="heading">Largest No :</h2>
+        <h2 className="heading">Largest No: </h2>
         <h2 className="LargestNoField">{this.state.largestNum}</h2>
         <br /><br /><br /><br />
         <Box
@@ -58,9 +66,10 @@ class App extends Component {
           noValidate
           autoComplete="off"
         >
-          <TextField value={this.state.userInput} id="standard" onChange={(e) => this.inputHandleChange(e)} label="Enter Number" color="warning" type="number" variant="standard" />
+          <TextField value={this.state.userInput} id="standard" onChange={(e) => this.inputHandleChange(e)} label="Enter Number" color="warning" type="number" name="number" variant="standard" />
         </Box>
         <i className="fas fa-plus-circle fa-3x" onClick={this.updatingArray}></i>
+        <div style={{color: "red"}}>{this.state.validate}</div>
         <div className="listDiv">
           <ul className="unorderList">{this.state.userInputArray.map((val, ind) => {
             return <li key={ind}>{val}</li>
